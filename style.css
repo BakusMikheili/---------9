@@ -1,0 +1,386 @@
+/* ბრაუზერის ნაგულისხმევი დაშორებების მოხსნა, რომ ყველა ზომა ჩვენ გავაკონტროლოთ */
+/* გვერდის გვერდითი ველი: 8%, მაგრამ შიგთავსი 1200px-ზე ფართო არ ხდება (ფონიანი ბლოკებისთვის) */
+:root {
+  --gutter: max(8%, calc((100% - 1200px) / 2));
+}
+
+html {
+  scroll-padding-top: 5rem; /* ბმულზე გადასვლისას სათაური (sticky header) სექციას არ ფარავს */
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; /* padding და border სიგანეში შედის */
+}
+
+a { text-decoration: none; color: inherit; }
+img { display: block; max-width: 100%; height: auto; } /* სურათი მშობელზე დიდი არ ხდება */
+button { font: inherit; cursor: pointer; }
+
+/*  ზოგადი სტილები  */
+body {
+  font-family: "Noto Sans Georgian", sans-serif;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: #2e2a26;
+  background-color: #f6f1e7;
+}
+
+h1, h2, h3 {
+  font-family: "Noto Serif Georgian", serif;
+  color: #5c1a23;
+  line-height: 1.2;
+}
+
+h1 { font-size: clamp(2rem, 1rem + 4.5vw, 3.25rem); } /* ტელეფონზე 32px, დიდ ეკრანზე 52px */
+h2 { font-size: 2.25rem; }
+h3 { font-size: 1.375rem; }
+
+/* მცირე წარწერა სათაურის თავზე */
+.eyebrow {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #a98545;
+}
+
+/* ცენტრში მოთავსებული კონტეინერი: კიდეებთან 8%, მაქსიმუმ 1200px */
+.container {
+  width: 84%;
+  max-width: 1200px;
+  margin-inline: auto;
+}
+
+/* ღილაკები */
+.btn {
+  display: inline-block;
+  padding: 12px 22px;
+  border: 1px solid #5c1a23;
+  border-radius: 4px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.btn-primary { background-color: #5c1a23; color: #fdfaf2; }
+.btn-outline { background-color: transparent; color: #5c1a23; }
+.btn-light   { background-color: #fdfaf2; color: #5c1a23; border-color: #fdfaf2; }
+
+/*  HEADER  */
+.header {
+  display: flex;        /* ლოგო, მენიუ და ღილაკი ერთ ხაზზე უნდა იდგეს */
+  align-items: center;  /* ყველა ელემენტი ვერტიკალურად შუაში დგას */
+  flex-wrap: wrap;      /* ვიწრო ეკრანზე ღილაკი და მენიუ ახალ ხაზზე გადადის */
+  gap: 16px 48px;       /* ხაზებს შორის 16px, ელემენტებს შორის 48px */
+  padding: 18px var(--gutter);
+  position: sticky;     /* სქროლისას header ეკრანის ზედა კიდეზე რჩება */
+  top: 0;
+  z-index: 100;         /* ბარათები და ბეჯები header-ის ქვეშ გადის */
+  background-color: #fdfaf2;
+  border-bottom: 1px solid #ece4d3;
+}
+
+.logo {
+  display: flex;           /* ლოგოს ორი ტექსტის დასალაგებლად */
+  flex-direction: column;  /* სახელი ზემოთ, წარწერა — ქვემოთ (სვეტად) */
+}
+
+.logo-name {
+  font-family: "Noto Serif Georgian", serif;
+  font-size: 1.75rem;
+  line-height: 1.1;
+  color: #5c1a23;
+}
+
+.logo-sub {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #a98545;
+}
+
+/*  მენიუ (nav)  */
+.nav {
+  display: flex;      /* ბმულები ერთ ხაზზე, ჰორიზონტალურად */
+  flex-wrap: wrap;    /* ვიწრო ეკრანზე ბმულები ორ ხაზზე ლაგდება */
+  gap: 8px 32px;      /* ხაზებს შორის 8px, ბმულებს შორის 32px */
+}
+
+.nav a {
+  font-weight: 600;
+  font-size: 1rem;
+  padding-bottom: 2px;
+  border-bottom: 2px solid transparent;
+}
+
+.nav a.active { border-bottom-color: #a98545; } /* აქტიური გვერდის ხაზი */
+
+.header .btn {
+  margin-left: auto; /* auto margin მთელ თავისუფალ ადგილს იკავებს და ღილაკს მარჯვნივ აგდებს */
+}
+
+/*  HERO  */
+.hero {
+  display: flex;        /* ტექსტი და სურათი გვერდიგვერდ */
+  flex-wrap: wrap;      /* ვიწრო ეკრანზე ტექსტი სურათის ზემოთ გადადის */
+  align-items: center;  /* ტექსტი და სურათი ვერტიკალურად შუაში */
+  gap: 40px 6%;         /* ხაზებს შორის 40px, ტექსტსა და სურათს შორის 6% */
+  padding-block: 80px;
+}
+
+.hero-text {
+  flex: 1 1 320px;            /* ტექსტი და სურათი სივრცეს თანაბრად იყოფენ, მაგრამ 320px-ზე ვიწრო არ ხდება */
+  display: flex;              /* ტექსტის ელემენტები ერთმანეთის ქვეშ */
+  flex-direction: column;     /* სვეტად დაწყობა */
+  align-items: flex-start;    /* ელემენტები მარცხენა კიდეზე, ღილაკები არ იჭიმება */
+  gap: 16px;                  /* ელემენტებს შორის თანაბარი დაშორება */
+}
+
+.lead {
+  color: #6e645a;
+  max-width: 480px;
+}
+
+.hero-buttons {
+  display: flex;      /* ორი ღილაკი ერთ ხაზზე */
+  flex-wrap: wrap;    /* ვიწრო ეკრანზე ღილაკი ახალ ხაზზე გადადის */
+  gap: 16px;          /* ღილაკებს შორის დაშორება (ხაზებს შორისაც) */
+  margin-top: 12px;
+}
+
+.hero-img {
+  flex: 1 1 320px;  /* ტექსტთან ერთად თანაბრად იყოფს სივრცეს, 320px-ზე ვიწრო არ ხდება */
+  min-width: 0;     /* ელემენტს აძლევს საშუალებას შეიკუმშოს შიგთავსის მინიმალურ ზომაზე ნაკლებადაც, რომ სურათმა flex-ის ხაზი არ გააფართოვოს */
+  height: 430px;
+  object-fit: cover;
+  border-radius: 6px;
+  box-shadow: 0 20px 40px rgba(46, 42, 38, 0.18);
+}
+
+/*  უპირატესობები  */
+.features {
+  display: flex;     /* სამი ბლოკი ერთ ხაზზე */
+  flex-wrap: wrap;   /* ტელეფონზე ბლოკები ქვეშ-ქვეშ გადადის */
+  gap: 40px;         /* ბლოკებს შორის დაშორება */
+  padding: 64px var(--gutter);
+  background-color: #ece4d3;
+}
+
+.feature {
+  flex: 1 1 220px;          /* სივრცე ბლოკებს შორის თანაბრად ნაწილდება, 220px-ზე ვიწრო არ ხდება */
+  display: flex;            /* ბლოკის შიგთავსის დასალაგებლად */
+  flex-direction: column;   /* ხატულა, სათაური და ტექსტი ერთმანეთის ქვეშ */
+  align-items: center;      /* ყველაფერი ჰორიზონტალურად ცენტრშია */
+  gap: 8px;
+  text-align: center;
+}
+
+.feature h3 { color: #2e2a26; font-size: 1.375rem; }
+.feature p  { font-size: 1rem; color: #6e645a; }
+
+.icon-circle {
+  display: flex;
+  justify-content: center;  /* ხატულა წრის ცენტრში ჰორიზონტალურად */
+  align-items: center;      /* და ვერტიკალურადაც */
+  width: 72px;
+  height: 72px;
+  margin-bottom: 12px;
+  border-radius: 50%;
+  background-color: #5c1a23;
+  color: #fdfaf2;
+}
+
+/*  შეფის რჩეული  */
+.chef {
+  display: flex;           /* სათაური და ბარათები ერთმანეთის ქვეშ */
+  flex-direction: column;  /* სვეტად დაწყობა */
+  gap: 48px;               /* სათაურსა და ბარათებს შორის დაშორება */
+  padding-top: 80px;
+}
+
+.section-head {
+  display: flex;
+  flex-direction: column;  /* წარწერა, სათაური და ტექსტი ერთმანეთის ქვეშ */
+  align-items: center;     /* ცენტრში, როგორც დიზაინშია */
+  gap: 8px;
+  text-align: center;
+}
+
+.section-sub { color: #6e645a; font-size: 1rem; }
+
+.cards {
+  display: flex;    /* სამი ბარათი ერთ ხაზზე */
+  flex-wrap: wrap;  /* რაც არ ეტევა — ახალ ხაზზე: პლანშეტზე 2, ტელეფონზე 1 */
+  gap: 32px;        /* ბარათებს შორის დაშორება (ხაზებს შორისაც) */
+}
+
+.card {
+  flex: 1 1 260px;          /* ბარათები სივრცეს თანაბრად იყოფენ, მაგრამ 260px-ზე ვიწრო არ ხდება */
+  position: relative;       /* ბეჯი ბარათის კუთხეს მიეკრობა */
+  display: flex;            /* სურათი და ტექსტი ერთმანეთის ქვეშ */
+  flex-direction: column;
+  background-color: #fdfaf2;
+  border: 1px solid #c3b59c;
+  border-radius: 6px;
+  box-shadow: 0 10px 24px rgba(46, 42, 38, 0.1);
+  overflow: hidden;
+}
+
+.card img {
+  width: 100%;
+  aspect-ratio: 4 / 3;  /* ყველა სურათი ერთი პროპორციისაა */
+  object-fit: cover;    /* სურათი არ იწელება, საჭიროებისას იჭრება */
+}
+
+/* ბეჯი ბარათის ზედა მარჯვენა კუთხეში */
+.badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 1;               /* სურათის ზემოთაა, მაგრამ header-ის (z-index: 100) ქვეშ */
+  padding: 4px 12px;
+  border-radius: 999px;
+  background-color: #a98545;
+  color: #fdfaf2;
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+.card-body {
+  flex: 1;                  /* ტექსტის ნაწილი ბარათის დარჩენილ სიმაღლეზე იჭიმება (.cards-ში ბარათები ერთნაირი სიმაღლისაა), რომ ღილაკის ქვემოთ დაწევა შესაძლებელი იყოს */
+  display: flex;
+  flex-direction: column;   /* სათაური, აღწერა და ღილაკი ერთმანეთის ქვეშ */
+  gap: 12px;
+  padding: 24px;
+}
+
+.card-body p {
+  font-size: 1rem;
+  color: #6e645a;
+}
+
+.card-title {
+  display: flex;             /* სახელი, წერტილები და ფასი ერთ ხაზზე */
+  align-items: baseline;     /* სხვადასხვა ზომის ტექსტი ერთ საბაზო ხაზზე დგას */
+  gap: 12px;
+}
+
+.card-title h3 { color: #2e2a26; }
+
+.dots {
+  flex: 1;                           /* წერტილოვანი ხაზი სახელსა და ფასს შორის მთელ თავისუფალ ადგილს იკავებს */
+  border-bottom: 2px dotted #c3b59c;
+}
+
+.price {
+  font-size: 1.375rem;
+  font-weight: 700;
+  color: #5c1a23;
+}
+
+.card .btn {
+  margin-top: auto;         /* თუ .card-body-ში თავისუფალი ვერტიკალური სივრცეა, auto margin მას იკავებს და ღილაკს ქვემოთ წევს */
+  align-self: flex-end;     /* მხოლოდ ამ ღილაკს მარჯვნივ აგდებს, დანარჩენი ელემენტები არ იცვლება */
+  padding: 10px 18px;
+  font-size: 0.875rem;
+  background-color: transparent;
+}
+
+/*  დაჯავშნა  */
+.booking {
+  display: flex;
+  flex-wrap: wrap;                 /* ვიწრო ეკრანზე ღილაკი ტექსტის ქვემოთ გადადის */
+  justify-content: space-between;  /* თავისუფალ სივრცეს ელემენტებს შორის ანაწილებს: პირველი მარცხნივ, ბოლო მარჯვნივ */
+  align-items: center;             /* ორივე ვერტიკალურად შუაში */
+  gap: 24px 32px;                  /* ხაზებს შორის 24px, ელემენტებს შორის 32px */
+  margin-block: 80px;
+  padding: 56px;
+  background-color: #5c1a23;
+  border-radius: 6px;
+  color: #fdfaf2;
+}
+
+.booking h2 { color: #fdfaf2; font-size: 2.25rem; }
+.booking p  { font-size: 1rem; }
+
+/*  FOOTER  */
+.footer {
+  display: flex;           /* ზედა ნაწილი და ქვედა ხაზი ერთმანეთის ქვეშ */
+  flex-direction: column;
+  gap: 40px;
+  padding: 56px var(--gutter) 32px;
+  background-color: #421219;
+  color: #f6f1e7;
+}
+
+.footer-top {
+  display: flex;    /* ოთხი სვეტი გვერდიგვერდ */
+  flex-wrap: wrap;  /* ვიწრო ეკრანზე სვეტები ახალ ხაზზე გადადის */
+  gap: 32px 48px;   /* ხაზებს შორის 32px, სვეტებს შორის 48px */
+}
+
+.footer-brand { flex: 2 1 260px; }  /* ლოგოს სვეტი ორჯერ ფართოა, მაგრამ 260px-ზე ვიწრო არ ხდება */
+.footer-col   { flex: 1 1 160px; }  /* დანარჩენი სამი სვეტი ერთნაირია, მინიმუმ 160px */
+
+.footer-brand p { font-size: 1rem; max-width: 300px; }
+
+.footer-brand .footer-logo {
+  font-family: "Noto Serif Georgian", serif;
+  font-size: 1.75rem;
+  color: #fdfaf2;
+  margin-bottom: 8px;
+}
+
+.footer-col h3 {
+  font-family: "Noto Sans Georgian", sans-serif;
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: #fdfaf2;
+  margin-bottom: 8px;
+}
+
+.footer-col p { font-size: 1rem; }
+
+.footer-bottom {
+  display: flex;
+  flex-wrap: wrap;                 /* ვიწრო ეკრანზე ხატულები ტექსტის ქვემოთ გადადის */
+  justify-content: space-between;  /* თავისუფალ სივრცეს ელემენტებს შორის ანაწილებს: ტექსტი მარცხნივ, ხატულები მარჯვნივ */
+  align-items: center;             /* ვერტიკალურად შუაში */
+  gap: 16px 24px;                  /* ხაზებს შორის 16px, ელემენტებს შორის 24px */
+  padding-top: 24px;
+  border-top: 1px solid #6b3a40;
+  font-size: 0.875rem;
+}
+
+.socials {
+  display: flex;  /* სამი წრიანი ხატულა ერთ ხაზზე */
+  gap: 12px;
+}
+
+.socials a {
+  display: flex;
+  justify-content: center;  /* ხატულა წრის შუაში ჰორიზონტალურად */
+  align-items: center;      /* და ვერტიკალურად */
+  width: 40px;
+  height: 40px;
+  border: 1px solid #a98545;
+  border-radius: 50%;
+  color: #fdfaf2;
+}
+
+/*  ღილაკი „↑ ზემოთ“  */
+.to-top {
+  position: fixed;      /* სქროლისას ადგილიდან არ იძვრის */
+  right: 24px;          /* ეკრანის ქვედა მარჯვენა კუთხე, კიდეებიდან 24px */
+  bottom: 24px;
+  z-index: 100;
+  padding: 12px 18px;
+  border-radius: 999px;
+  background-color: #5c1a23;
+  color: #fdfaf2;
+  font-size: 0.9375rem;
+  font-weight: 700;
+}
